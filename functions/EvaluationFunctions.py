@@ -2,8 +2,9 @@ import numpy as np
 import itertools
 import inspect
 from enum import Enum
+from functions.LossFunctions import categorical_cross_entropy
 
-class TYPE(Enum): R2=1; MSE=2; MAE=3; ACC=4; PRC=5; RCL=6; F1=7; MTR=8;
+class TYPE(Enum): R2=1; MSE=2; MAE=3; ACC=4; PRC=5; RCL=6; F1=7; MTR=8; PPX=9
 
 class Metrics():
     def __init__(self, mtype, ncls=2):
@@ -16,6 +17,7 @@ class Metrics():
         if mtype == TYPE.RCL: self.func = recall
         if mtype == TYPE.F1:  self.func = f1
         if mtype == TYPE.MTR: self.func = confusion_matrix
+        if mtype == TYPE.PPX: self.func = perplexity
     
     def metrics(self, obs, prd):
         if 'cls' in inspect.signature(self.func).parameters:
@@ -70,3 +72,7 @@ def f1(obs, prd, cls=[0,1], mtr=None, delta=1e-7):
     r = recall(None, None, None, mtr, delta)
     p = precision(None, None, None, mtr, delta)
     return (2 * r * p) / (r + p)
+
+def perplexity(obs, prd, delta=1e-7):
+    l, _, _, _ = categorical_cross_entropy(obs, prd, delta)
+    return 2 ** l

@@ -19,13 +19,14 @@ class Model:
             dout = layer.backward(dout)
         return dout
 
-    def summary(self):
-        y = np.zeros(np.shape(self.layers[0].params[0].T))
+    def summary(self, dummy):
+        #y = np.zeros(np.shape(self.layers[0].params[0].T))
+        #y = np.zeros_like(self.layers[0].params[0]).T
         print('-' * 50)
         for layer in self.layers:
             print('layer :', layer.__class__.__name__)
             for param in layer.params:
                 print('param :', param.shape)
-            y = layer.forward(y)
-            print('output:', y.shape)
+            dummy = layer.forward(dummy)
+            print('output:', dummy.shape)
         print('-' * 50)
