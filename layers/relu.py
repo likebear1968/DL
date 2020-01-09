@@ -11,6 +11,6 @@ class Relu(LayerBase):
         out[self.mask] = 0
         return out
 
-    def backward(self, dout):
+    def backward(self, dout=1):
         dout[self.mask] = 0
         return dout
